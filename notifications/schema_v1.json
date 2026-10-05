@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WHAT Ecosystem Delivery Notifications Schema v1",
+  "type": "object",
+  "required": ["schema_version", "items"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "title", "message", "expires_at"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["banner", "dialog", "push", "survey"]
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["low", "normal", "high", "critical"],
+            "default": "normal"
+          },
+          "title": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "action_title": {
+            "type": "string"
+          },
+          "action_url": {
+            "type": "string"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dismissible": {
+            "type": "boolean",
+            "default": true
+          },
+          "targeting": {
+            "type": "object",
+            "properties": {
+              "app_ids": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "min_version_code": {
+                "type": "integer"
+              },
+              "max_version_code": {
+                "type": "integer"
+              },
+              "institutions": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "platforms": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "languages": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "survey": {
+            "type": "object",
+            "required": ["survey_id", "questions"],
+            "properties": {
+              "survey_id": { "type": "string" },
+              "submit_url": { "type": "string" },
+              "questions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["id", "title", "type"],
+                  "properties": {
+                    "id": { "type": "string" },
+                    "title": { "type": "string" },
+                    "type": {
+                      "type": "string",
+                      "enum": ["single_choice", "multi_choice", "text", "rating"]
+                    },
+                    "options": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

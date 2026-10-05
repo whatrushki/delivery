@@ -1,0 +1,97 @@
+name: Archive Expired Notifications
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # Every day at 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Archive expired notifications
+        run: |
+          python - << 'EOF'
+          import json
+          import os
+          from datetime import datetime, timezone
+
+          active_file = "notifications/active.json"
+          if not os.path.exists(active_file):
+              exit(0)
+
+          with open(active_file, "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          now = datetime.now(timezone.utc)
+          active_items = []
+          expired_items = []
+
+          for item in data.get("items", []):
+              expires_str = item.get("expires_at")
+              if not expires_str:
+                  active_items.append(item)
+                  continue
+              try:
+                  expires_dt = datetime.fromisoformat(expires_str.replace("Z", "+00:00"))
+                  if expires_dt < now:
+                      expired_items.append(item)
+                  else:
+                      active_items.append(item)
+              except Exception:
+                  active_items.append(item)
+
+          if not expired_items:
+              print("No expired items found.")
+              exit(0)
+
+          os.makedirs("notifications/archive", exist_ok=True)
+          archive_file = f"notifications/archive/{now.year}.json"
+          archived_data = {"year": now.year, "items": []}
+
+          if os.path.exists(archive_file):
+              try:
+                  with open(archive_file, "r", encoding="utf-8") as f:
+                      archived_data = json.load(f)
+              except Exception:
+                  pass
+
+          archived_ids = {i["id"] for i in archived_data["items"]}
+          for exp in expired_items:
+              if exp["id"] not in archived_ids:
+                  archived_data["items"].append(exp)
+
+          with open(archive_file, "w", encoding="utf-8") as f:
+              json.dump(archived_data, f, ensure_ascii=False, indent=2)
+
+          data["items"] = active_items
+          data["updated_at"] = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+          with open(active_file, "w", encoding="utf-8") as f:
+              json.dump(data, f, ensure_ascii=False, indent=2)
+
+          print(f"Archived {len(expired_items)} items successfully.")
+          EOF
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add notifications/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(ci): archive expired notifications"
+            git push
+          fi

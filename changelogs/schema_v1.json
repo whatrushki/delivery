@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WHAT Ecosystem Changelog Schema v1",
+  "type": "object",
+  "required": ["schema_version", "app_id", "releases"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "app_id": {
+      "type": "string"
+    },
+    "releases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["version_name", "version_code", "release_date", "title"],
+        "properties": {
+          "version_name": { "type": "string" },
+          "version_code": { "type": "integer" },
+          "release_date": { "type": "string", "format": "date" },
+          "title": { "type": "string" },
+          "download_url": { "type": "string" },
+          "is_critical": { "type": "boolean", "default": false },
+          "categories": {
+            "type": "object",
+            "properties": {
+              "new": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "improved": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "fixed": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "breaking": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
