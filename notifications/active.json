@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-06T00:00:00Z",
+  "updated_at": "2026-10-21T12:00:00Z",
   "items": [
     {
       "id": "welcome-ecosystem-update",
@@ -17,6 +17,52 @@
       "targeting": {
         "app_ids": ["app.what.schedule"],
         "platforms": ["android"]
+      }
+    },
+    {
+      "id": "survey-v2-feedback",
+      "type": "survey",
+      "priority": "normal",
+      "title": "Опрос: Опыт использования расписания",
+      "message": "Помогите нам сделать приложение удобнее, ответив на пару коротких вопросов.",
+      "icon": "poll",
+      "action_title": "Пройти опрос",
+      "starts_at": "2026-10-21T00:00:00Z",
+      "expires_at": "2026-12-01T00:00:00Z",
+      "dismissible": true,
+      "targeting": {
+        "app_ids": ["app.what.schedule"],
+        "platforms": ["android"]
+      },
+      "survey": {
+        "survey_id": "v2_experience",
+        "submit_url": "https://what-assistant.whatrushki-tech.workers.dev/api/surveys/submit",
+        "questions": [
+          {
+            "id": "satisfaction",
+            "title": "Как вам удобство нового интерфейса?",
+            "type": "rating",
+            "required": true
+          },
+          {
+            "id": "favorite_features",
+            "title": "Какие функции для вас наиболее полезны?",
+            "type": "multi_choice",
+            "options": [
+              "Оффлайн-режим расписания",
+              "Виджет на рабочий стол",
+              "Подсветка текущей пары",
+              "Уведомления о заменах"
+            ],
+            "required": false
+          },
+          {
+            "id": "improvements",
+            "title": "Чего вам больше всего не хватает в приложении?",
+            "type": "text",
+            "required": false
+          }
+        ]
       }
     }
   ]
