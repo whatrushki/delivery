@@ -1,24 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-21T17:00:00Z",
+  "updated_at": "2026-11-01T10:00:27Z",
   "items": [
-    {
-      "id": "welcome-ecosystem-update",
-      "type": "banner",
-      "priority": "normal",
-      "title": "Обновление экосистемы WHAT",
-      "message": "Мы готовим глобальное обновление ядра приложения и системы расписания. Следите за новостями!",
-      "icon": "sparkles",
-      "action_title": "Подробнее",
-      "action_url": "https://github.com/whatrushki",
-      "starts_at": "2026-10-01T00:00:00Z",
-      "expires_at": "2026-11-01T00:00:00Z",
-      "dismissible": true,
-      "targeting": {
-        "app_ids": ["app.what.schedule"],
-        "platforms": ["android"]
-      }
-    },
     {
       "id": "survey-v2-feedback",
       "type": "survey",
@@ -31,8 +14,12 @@
       "expires_at": "2026-12-01T00:00:00Z",
       "dismissible": true,
       "targeting": {
-        "app_ids": ["app.what.schedule"],
-        "platforms": ["android"]
+        "app_ids": [
+          "app.what.schedule"
+        ],
+        "platforms": [
+          "android"
+        ]
       },
       "survey": {
         "survey_id": "v2_experience",
